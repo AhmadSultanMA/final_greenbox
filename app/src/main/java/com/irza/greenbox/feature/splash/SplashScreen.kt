@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.irza.greenbox.R
 import com.irza.greenbox.feature.main.route.Screen
+import com.irza.greenbox.ui.theme.CustGreen
 import com.irza.greenbox.ui.theme.Purple80
 import kotlinx.coroutines.delay
 
@@ -63,8 +65,8 @@ fun SplashScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = text,
-                style = MaterialTheme.typography.displaySmall,
-                color = Purple80
+                style = MaterialTheme.typography.displayMedium,
+                color = CustGreen
             )
         }
     }

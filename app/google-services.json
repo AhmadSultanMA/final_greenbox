@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "410028020605",
+    "project_id": "eticket-smkmq-163a1",
+    "storage_bucket": "eticket-smkmq-163a1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410028020605:android:b630384331c1206448f214",
+        "android_client_info": {
+          "package_name": "com.example.eticket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410028020605-t4a2vmakfn6a6ftjhu5f4egmlhlqchgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDDJ4bsxuug11NbNunmxiMyAYeXizykt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410028020605-t4a2vmakfn6a6ftjhu5f4egmlhlqchgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410028020605:android:0c68c3ae5c42c22148f214",
+        "android_client_info": {
+          "package_name": "com.irza.greenbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410028020605-t4a2vmakfn6a6ftjhu5f4egmlhlqchgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDDJ4bsxuug11NbNunmxiMyAYeXizykt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410028020605-t4a2vmakfn6a6ftjhu5f4egmlhlqchgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
