@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.irza.greenbox.R
 import com.irza.greenbox.feature.main.components.buttons.PrimaryButton
@@ -38,12 +41,32 @@ import com.irza.greenbox.feature.main.route.Screen
 import com.irza.greenbox.ui.theme.CustBlack
 import com.irza.greenbox.ui.theme.CustGreen
 import com.irza.greenbox.ui.theme.CustWhite
+import kotlinx.coroutines.delay
 
 @Composable
 fun SignUpScreen(navController: NavController) {
-    val name = remember { mutableStateOf("") }
+    val nama = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+
+    val viewModel : SignUpViewModel = viewModel()
+
+    LaunchedEffect(viewModel.errMsg.value) {
+        if (viewModel.errMsg.value.isNotEmpty()) {
+            delay(3000)
+            viewModel.errMsg.value = ""
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel.isSuccess.value){
+        if (viewModel.isSuccess.value) {
+            navController.navigate(Screen.Login.route) {
+                popUpTo(Screen.SignUp.route) {
+                    inclusive = true
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -72,7 +95,7 @@ fun SignUpScreen(navController: NavController) {
 
                 Text(text = "Full Name", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 16.dp))
                 Spacer(modifier = Modifier.height(8.dp))
-                NameField(value = name.value, onValueChange = { name.value = it })
+                NameField(value = nama.value, onValueChange = { nama.value = it })
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -97,9 +120,18 @@ fun SignUpScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Login Button
-                PrimaryButton(text = "Sign Up") {
-
+                if (viewModel.isLoading.value){
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+                        CircularProgressIndicator()
+                    }
+                }else {
+                    PrimaryButton(text = "Sign Up") {
+                        if(email.value == "" || password.value == "" || nama.value == ""){
+                            viewModel.errMsg.value = "Harap isi semua kolom"
+                        }else{
+                            viewModel.signUp(email.value, password.value, nama.value)
+                        }
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

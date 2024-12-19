@@ -26,8 +26,7 @@ import com.irza.greenbox.R
 
 @Composable
 fun VideoCard(judul: String, imageRes: Int, modifier: Modifier = Modifier) {
-    val trimmedJudul = judul.split(" ").take(5).joinToString(" ") +
-            if (judul.split(" ").size > 5) "..." else ""
+
     Column(
         modifier = modifier
     ){
@@ -68,10 +67,11 @@ fun VideoCard(judul: String, imageRes: Int, modifier: Modifier = Modifier) {
         }
 
         Text(
-            text = trimmedJudul,
+            text = judul,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 14.sp,
             color = Color.Black,
+            maxLines = 3,
             modifier = Modifier.padding(top = 8.dp)
         )
     }

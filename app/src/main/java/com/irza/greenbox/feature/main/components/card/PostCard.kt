@@ -3,6 +3,7 @@ package com.irza.greenbox.feature.main.components.card
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,24 +21,33 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.irza.greenbox.R
+import com.irza.greenbox.feature.main.route.Screen
 import com.irza.greenbox.ui.theme.CustBeige
 import com.irza.greenbox.ui.theme.CustBlack
 import com.irza.greenbox.ui.theme.CustLightGreen
 import com.irza.greenbox.ui.theme.CustOrange
 
 @Composable
-fun PostCard(judul: String, @DrawableRes imageRes: Int, category: String, modifier: Modifier = Modifier) {
-    val trimmedJudul = judul.split(" ").take(5).joinToString(" ") +
-            if (judul.split(" ").size > 5) "..." else ""
+fun PostCard(navController: NavController, id: String ,judul: String, category: String, modifier: Modifier = Modifier) {
+
     Card(
         modifier = modifier
             .clip(shape = RoundedCornerShape(10))
+            .clickable {
+                navController.navigate("${Screen.PostDetail.route}/${id}") {
+                    popUpTo(Screen.Dashboard.route) {
+                        inclusive = true
+                    }
+                }
+            }
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = imageRes),
+                painter = painterResource(id = R.drawable.post),
                 contentDescription = "News Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -68,9 +78,10 @@ fun PostCard(judul: String, @DrawableRes imageRes: Int, category: String, modifi
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = trimmedJudul,
+                    text = judul,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Bold,
+                    maxLines = 3,
                     color = CustBlack
                 )
             }

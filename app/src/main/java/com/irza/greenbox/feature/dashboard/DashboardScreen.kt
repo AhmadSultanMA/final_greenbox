@@ -2,11 +2,13 @@ package com.irza.greenbox.feature.dashboard
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,10 +21,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.irza.greenbox.R
 import com.irza.greenbox.feature.main.components.appBar.AppBar
@@ -32,14 +37,13 @@ import com.irza.greenbox.feature.main.components.card.PostCard
 import com.irza.greenbox.feature.main.components.card.VideoCard
 import com.irza.greenbox.feature.main.components.indicator.LinearIndicator
 import com.irza.greenbox.feature.main.navigation.BottomNavigationBar
+import com.irza.greenbox.feature.main.route.Screen
 import com.irza.greenbox.model.cardData.CardData
-import com.irza.greenbox.model.postData.PostData
 import com.irza.greenbox.model.videoData.VideoData
 import com.irza.greenbox.ui.theme.CustGreen
 import com.irza.greenbox.ui.theme.CustWhite
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Dashboard(navController: NavController) {
     val dataList = listOf(
@@ -49,22 +53,28 @@ fun Dashboard(navController: NavController) {
         CardData("Pipe PVC", "g", 800, 30)
     )
 
-    val postDataList = listOf(
-        PostData(judul = "Krisis Lingkungan: Dampak Merusak Sampah Terhadap Kehidupan Bumi", category = "News", imageRes = R.drawable.post),
-        PostData(judul = "Manfaat Luar Biasa Dari Mendaur Ulang: Untungnya Untuk Bumi dan Kita", category = "Article", imageRes = R.drawable.post)
-    )
-
     val videoDataList = listOf(
         VideoData(judul = "Merangkul Kegelisahan: Sampah di Pantai dan Pemulihannya", imageRes = R.drawable.video),
         VideoData(judul = "Perjuangan Bersama: Mengatasi Pembuangan Sampah di Komplek Perumahan", imageRes = R.drawable.video)
     )
 
+    val viewModel: DashboardViewModel = viewModel()
+
+    LaunchedEffect(key1 = true){
+        viewModel.getAllUserByPoint()
+    }
+
+
+    val leaderboard = viewModel.leaderboard.take(3)
+
     Scaffold(
-        topBar = { AppBar() },
+        topBar = { AppBar(navController, viewModel.user.value?.nama ?: "") },
         bottomBar = { BottomNavigationBar(navController = navController)}
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp)
         ) {
@@ -86,7 +96,7 @@ fun Dashboard(navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "1230",
+                                text = viewModel.user.value?.point.toString(),
                                 style = MaterialTheme.typography.displayLarge,
                                 color = CustWhite
                             )
@@ -106,7 +116,7 @@ fun Dashboard(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = "Daily Goals", style = MaterialTheme.typography.titleLarge)
+                Text(text = "Daily Goals", style = MaterialTheme.typography.titleLarge, color = Color.Black)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -135,39 +145,33 @@ fun Dashboard(navController: NavController) {
             item {
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = "Leaderboard", style = MaterialTheme.typography.titleLarge)
+                Text(text = "Leaderboard", style = MaterialTheme.typography.titleLarge, color = Color.Black)
 
                 Spacer(modifier = Modifier.height(16.dp))
+            }
 
+            items(leaderboard.size){
+                index: Int ->
                 LeaderboardCard(
-                    rank = 1,
-                    name = "Ellie Handerson",
-                    points = 1480,
-                    imageRes = R.drawable.profile
+                    uid = viewModel.auth.uid ?: "",
+                    id = viewModel.leaderboard[index].uid,
+                    rank = index + 1,
+                    name = viewModel.leaderboard[index].nama,
+                    points = viewModel.leaderboard[index].point.toInt(),
+                    type = 0
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                LeaderboardCard(
-                    rank = 2,
-                    name = "Conrad Donovan",
-                    points = 1230,
-                    imageRes = R.drawable.profile
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                LeaderboardCard(
-                    rank = 3,
-                    name = "Julie Rose",
-                    points = 890,
-                    imageRes = R.drawable.profile
-                )
+            }
 
-                Spacer(modifier = Modifier.height(16.dp))
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Videos", style = MaterialTheme.typography.titleLarge)
+                    Text(text = "Videos", style = MaterialTheme.typography.titleLarge, color = Color.Black)
                     Text(text = "More", style = MaterialTheme.typography.bodyLarge, color = CustGreen)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -197,14 +201,14 @@ fun Dashboard(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Featured Posts", style = MaterialTheme.typography.titleLarge)
+                    Text(text = "Featured Posts", style = MaterialTheme.typography.titleLarge, color = Color.Black)
                     Text(text = "More", style = MaterialTheme.typography.bodyLarge, color = CustGreen)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            items(postDataList.chunked(2)) { row ->
+            items(viewModel.postData.chunked(2)) { row ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -212,9 +216,10 @@ fun Dashboard(navController: NavController) {
                     ) {
                     row.forEach { postData ->
                         PostCard(
+                            navController,
+                            id = postData.id,
                             judul = postData.judul,
-                            category = postData.category,
-                            imageRes = postData.imageRes,
+                            category = postData.kategori,
                             modifier = Modifier
                                 .weight(1f)
                                 .padding(vertical = 8.dp)

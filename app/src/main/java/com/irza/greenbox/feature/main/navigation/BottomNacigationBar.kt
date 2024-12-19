@@ -68,7 +68,7 @@ fun BottomNavigationBar(navController: NavController) {
                         fontWeight = FontWeight.Bold,
                         fontSize = 10.sp,
                     ),
-                    color = if (currentRoute == BottomNavigationItem.Dashboard.route) CustGreen else CustGrayField
+                    color = if (currentRoute == BottomNavigationItem.Dashboard.route) CustGreen else Color.Gray
                 )
             },
             selected = currentRoute == BottomNavigationItem.Dashboard.route,
@@ -136,7 +136,7 @@ fun BottomNavigationBar(navController: NavController) {
                     style = TextStyle(
                         fontFamily = FontFamily(Font(R.font.sans_medium)),
                         fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp,
+                        fontSize = 9.sp,
                     ),
                     color = if (currentRoute == BottomNavigationItem.Leaderboard.route) CustGreen else Color.Gray
                 )
@@ -186,7 +186,7 @@ fun BottomNavigationBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 30.dp),
+            .padding(bottom = 20.dp),
         contentAlignment = Alignment.Center
     ) {
         FloatingActionButton(
@@ -194,7 +194,8 @@ fun BottomNavigationBar(navController: NavController) {
                 navController.navigate(Screen.Scan.route)
             },
             shape = CircleShape,
-            containerColor = CustGreen
+            containerColor = CustGreen,
+
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_scan),

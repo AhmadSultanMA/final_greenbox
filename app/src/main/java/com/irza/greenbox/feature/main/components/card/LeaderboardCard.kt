@@ -24,15 +24,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.irza.greenbox.R
 import com.irza.greenbox.ui.theme.CustBlack
 import com.irza.greenbox.ui.theme.CustGreen
 import com.irza.greenbox.ui.theme.CustLightGreen
 import com.irza.greenbox.ui.theme.CustWhite
 
 @Composable
-fun LeaderboardCard(rank: Int, name: String, points: Int, @DrawableRes imageRes: Int) {
+fun LeaderboardCard(uid:String, id: String ,rank: Int, name: String, points: Int, type: Int) {
+
+    fun processName(name: String): String {
+        return if (name.length > 12) {
+            name.split(" ").firstOrNull() ?: ""
+        } else {
+            name
+        }
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,7 +53,7 @@ fun LeaderboardCard(rank: Int, name: String, points: Int, @DrawableRes imageRes:
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = if (rank%2 == 0)  CustGreen else CustLightGreen)
+                .background(color = if(type == 0) if (rank%2 == 0)  CustGreen else CustLightGreen else if(uid == id) CustWhite else CustLightGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -51,7 +63,7 @@ fun LeaderboardCard(rank: Int, name: String, points: Int, @DrawableRes imageRes:
             ) {
                 Box {
                     Image(
-                        painter = painterResource(id = imageRes),
+                        painter = painterResource(id = R.drawable.profile),
                         contentDescription = "Profile Image",
                         modifier = Modifier
                             .size(48.dp)
@@ -77,9 +89,9 @@ fun LeaderboardCard(rank: Int, name: String, points: Int, @DrawableRes imageRes:
                 Spacer(modifier = Modifier.width(12.dp))
 
                 Text(
-                    text = name,
+                    text = processName(name),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = if (rank%2 == 0)  CustWhite else CustBlack
+                    color = if(type == 0) if (rank%2 == 0)  CustWhite else CustBlack else CustBlack
                 )
             }
 
@@ -98,8 +110,10 @@ fun LeaderboardCard(rank: Int, name: String, points: Int, @DrawableRes imageRes:
 
                 Text(
                     text = "$points pts",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (rank%2 == 0)  CustWhite else CustBlack
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = if(type == 0) if (rank%2 == 0)  CustWhite else CustBlack else CustBlack
                 )
             }
         }

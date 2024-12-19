@@ -10,5 +10,8 @@ sealed class Screen(val route: String){
     object Leaderboard : Screen("leaderboard")
     object Reward : Screen("reward")
     object Scan : Screen("scan")
+    object PostDetail : Screen("postdetail")
+    object Redeem : Screen("redeem")
+    object Profile : Screen("profile")
 
 }

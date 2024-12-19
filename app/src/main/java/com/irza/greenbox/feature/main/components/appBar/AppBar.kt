@@ -3,6 +3,7 @@ package com.irza.greenbox.feature.main.components.appBar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,11 +27,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.irza.greenbox.R
+import com.irza.greenbox.feature.main.route.Screen
 import com.irza.greenbox.ui.theme.CustWhite
 
 @Composable
-fun AppBar() {
+fun AppBar(navController: NavController, nama: String) {
+    fun firstName(fullName: String): String {
+        return fullName.split(" ").firstOrNull() ?: ""
+    }
+
     Row(
         modifier = Modifier
             .background(color = CustWhite)
@@ -45,6 +52,11 @@ fun AppBar() {
                 .size(48.dp)
                 .clip(CircleShape)
                 .border(2.dp, Color.LightGray, CircleShape)
+                .clickable {
+                    navController.navigate(Screen.Profile.route) {
+                        popUpTo(Screen.Dashboard.route) { inclusive = true }
+                    }
+                }
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -54,14 +66,15 @@ fun AppBar() {
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = "Hello, Conrad",
+                text = "Hello, " + firstName(nama),
                 style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             Text(
                 text = "Malang, East Java",
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
+                color = Color.Black
             )
         }
 

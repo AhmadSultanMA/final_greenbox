@@ -26,13 +26,13 @@ fun LinearIndicator(percent : Int) {
             .height(30.dp)
     ) {
         LinearProgressIndicator(
-            progress = percent / 100f,
+            progress = { percent / 100f },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(16.dp)
                 .clip(shape = RoundedCornerShape(100)),
             color = CustBeige,
-            trackColor = CustWhite
+            trackColor = CustWhite,
         )
         Text(
             text = "$percent%",
